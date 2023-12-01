@@ -36,6 +36,15 @@ services:
     ports:
       - "1433:1433"
 
+  registrationdb:
+    container_name: registrationdb
+    environment:
+      MSSQL_SA_PASSWORD: "Jay@12345678"
+      ACCEPT_EULA: "Y"
+    restart: always
+    ports:
+      - "1444:1433"
+
   rabbitmq:
     container_name: rabbitmq
     restart: always
@@ -125,4 +134,13 @@ services:
       - "ApiSettings:OrderingUrl=http://ordering.api"
     ports:
       - "8005:80"
+
+
+  registration.api:
+    container_name: registration.api
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - "ConnectionStrings:DefaultConnection=Server=registrationdb;Database=RegistrationDB;User Id=sa;Password=Jay@12345678;TrustServerCertificate=True;"
+    ports:
+      - "8006:80"
 
