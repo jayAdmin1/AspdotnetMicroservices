@@ -41,7 +41,7 @@ namespace Registration.API.Controllers
         }
 
         [Authorize]
-        [HttpDelete]
+        [HttpDelete("{id}")]
         //[SwaggerResponse(StatusCodes.Status200OK)]
         //[SwaggerResponse(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> RemoveUser([Required] Guid id, CancellationToken cancellationToken = default)
@@ -51,7 +51,7 @@ namespace Registration.API.Controllers
         }
 
         [Authorize]
-        [HttpPut]
+        [HttpPut("{id}")]
         public async Task<IActionResult> UpdateUser([Required] Guid id, UserUpdateModel userUpdateModel, CancellationToken cancellationToken = default)
         {
             var result = await _userService.UpdateUser(id, userUpdateModel, cancellationToken);

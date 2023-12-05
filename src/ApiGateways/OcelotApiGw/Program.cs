@@ -21,11 +21,13 @@ var app = builder.Build();
 app.UseRouting();
 app.UseEndpoints(endpoints =>
 {
+    //endpoints.MapControllers();
     endpoints.MapGet("/", async context =>
     {
         await context.Response.WriteAsync("Hello World!");
     });
 });
+//app.en
 //app.MapGet("/", () => "Hello World!");
 
 await app.UseOcelot();

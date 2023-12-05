@@ -29,7 +29,7 @@ namespace eshopFrontEnd.Pages
             var userName = "swn";
             var basket = await _basketService.GetBasket(userName);
 
-            var item = basket.Items.Single(x => x.ProductId == productId);
+            var item = basket.Items.FirstOrDefault(x => x.ProductId == productId);
             basket.Items.Remove(item);
 
             var basketUpdated = await _basketService.UpdateBasket(basket);
