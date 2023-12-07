@@ -22,8 +22,8 @@ namespace eshopFrontEnd.Pages
         }
         public async Task<IActionResult> OnPostAddUserAsync(UserAddModel userAddModel)
         {
-            var user = await _userService.CreateUser(userAddModel);
-            return user.Item2.Message.ToString() is not "" ? RedirectToPage("error", user.Item2) : RedirectToPage();
+            var result = await _userService.CreateUser(userAddModel);
+            return !string.IsNullOrEmpty(result.Item2.Message) ? RedirectToPage("error", result.Item2) : RedirectToPage("Login");
         }
     }
 }

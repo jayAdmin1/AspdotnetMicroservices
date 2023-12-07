@@ -47,13 +47,13 @@ namespace Registration.API.Services.Implementation
                     return (string.Empty, new RegistrationApiError(errorMessage));
                 }
 
-                if (userEmailModel.OldEmail.Equals(userEmailModel.NewEmail))
+                if (userEmailModel.OldEmailAddress.Equals(userEmailModel.NewEmailAddress))
                 {
                     error = "Both EmailAddress Are Same";
                     return (string.Empty, new RegistrationApiError(error));
                 }
 
-                var userdata = await _userRepository.GetUserEmailAddress(userEmailModel.OldEmail, cancellationToken);
+                var userdata = await _userRepository.GetUserEmailAddress(userEmailModel.OldEmailAddress, cancellationToken);
                 if (userdata is null)
                 {
                     error = "Old EmailAddress Doesn't Match";
@@ -61,13 +61,13 @@ namespace Registration.API.Services.Implementation
                 }
 
 
-                var newEmailUserData = await _userRepository.GetUserEmailAddress(userEmailModel.NewEmail, cancellationToken);
+                var newEmailUserData = await _userRepository.GetUserEmailAddress(userEmailModel.NewEmailAddress, cancellationToken);
                 if (newEmailUserData is not null)
                 {
                     error = "New EmailAddress Is Already Exists. Please Try with different EmailAddress";
                     return (string.Empty, new RegistrationApiError(error));
                 }
-                userdata.EmailAddress = userEmailModel.NewEmail;
+                userdata.EmailAddress = userEmailModel.NewEmailAddress;
                 var IsEmailUpdated = await _userRepository.UpdateEmailAddress(userdata, cancellationToken);
                 if (IsEmailUpdated)
                 {

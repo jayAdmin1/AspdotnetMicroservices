@@ -11,7 +11,10 @@ builder.Services.AddHttpClient<IOrderService, OrderService>(c => c.BaseAddress =
 builder.Services.AddHttpClient<IUserService, UserService>(c => c.BaseAddress = new Uri(builder.Configuration["ApiSettings:GatewayAddress"]));
 
 builder.Services.AddRazorPages();
-
+builder.Services.AddSession(options =>
+{
+    options.IdleTimeout = TimeSpan.FromMinutes(20); // Set session timeout
+});
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -27,7 +30,7 @@ else
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
-
+app.UseSession();
 app.UseRouting();
 
 app.UseAuthorization();

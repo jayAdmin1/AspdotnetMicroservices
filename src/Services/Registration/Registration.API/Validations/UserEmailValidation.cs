@@ -7,13 +7,13 @@ namespace Registration.API.Validations
     {
         public UserEmailValidation()
         {
-            RuleFor(m => m.OldEmail)
+            RuleFor(m => m.OldEmailAddress)
             .NotEmpty()
             .WithMessage("Old Email Address Required")
             .Matches(@"([\w-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([\w-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$")
             .WithMessage("Enter Valid Email Address");
 
-            RuleFor(m => m.NewEmail)
+            RuleFor(m => m.NewEmailAddress)
             .NotEmpty()
             .WithMessage("New Email Address Required")
             .Matches(@"([\w-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([\w-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$")

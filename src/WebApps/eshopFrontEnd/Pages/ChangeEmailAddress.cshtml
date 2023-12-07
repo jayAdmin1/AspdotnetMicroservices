@@ -3,6 +3,7 @@
 @{
     ViewData["Title"] = "ChangeEmailAddress";
 }
+
 <div class="container">
     <div class="row">
         <div class="col">
@@ -24,14 +25,16 @@
                     Change EmailAddress
                 </div>
                 <div class="card-body">
-                    <form>
+                    <form asp-page-handler="ChangeUserEmail" method="post" >
                         <div class="form-group">
-                            <label for="oldemail">Old EmailAddress</label>
-                            <input type="email" class="form-control" id="oldemail" placeholder="Enter old email" required>
+                            <label for="@nameof(UserChangeEmailAddressModel.OldEmailAddress)">Old EmailAddress</label>
+                            <input asp-for="UserChangeEmailAddressModel.OldEmailAddress" class="form-control" placeholder="Enter old email" >
+                            <span asp-validation-for="UserChangeEmailAddressModel.OldEmailAddress" class="text-danger"></span>
                         </div>
                         <div class="form-group">
-                            <label for="newemail">New EmailAddress</label>
-                            <input type="password" class="form-control" id="newemail" placeholder="Enter new email" required>
+                            <label for="@nameof(UserChangeEmailAddressModel.NewEmailAddress)">New EmailAddress</label>
+                            <input asp-for="UserChangeEmailAddressModel.NewEmailAddress" class="form-control" placeholder="Enter new email">
+                            <span asp-validation-for="UserChangeEmailAddressModel.NewEmailAddress" class="text-danger"></span>
                         </div>
                         <div class="mx-auto">
                             <button type="submit" class="btn btn-primary text-right">Submit</button> Or

@@ -2,7 +2,7 @@
 {
     public class UserEmailModel
     {
-        public string OldEmail { get; set; }
-        public string NewEmail { get; set; }
+        public string OldEmailAddress { get; set; }
+        public string NewEmailAddress { get; set; }
     }
 }
