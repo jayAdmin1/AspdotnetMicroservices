@@ -27,13 +27,15 @@
                     <form asp-page-handler="LoginUser" method="Post">
 
                         <div class="form-group">
-                            <label for="email">Email address</label>
-                            <input type="email" class="form-control" id="emailAddress" name="@nameof(Model.userLogin.EmailAddress)" aria-describedby="emailHelp" placeholder="Enter email" required>
+                            <label for="@nameof(UserLoginModel.EmailAddress)">Email address</label>
+                            <input asp-for="userLogin.EmailAddress" class="form-control" placeholder="Enter the Email Address"></input>
                             <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
+                            <span asp-validation-for="userLogin.EmailAddress" class="text-danger"></span>
                         </div>
                         <div class="form-group">
                             <label for="name">Password</label>
-                            <input type="password" class="form-control" id="password" name="@nameof(Model.userLogin.Password)" aria-describedby="emailHelp" placeholder="Enter password" required>
+                            <input asp-for="userLogin.Password" type="password" class="form-control" placeholder="Enter the Password"></input>
+                            <span asp-validation-for="userLogin.Password" class="text-danger"></span>
                         </div>
                         <div class="mx-auto">
                             <button type="submit" class="btn btn-primary text-right">Login</button> Or
@@ -50,7 +52,7 @@
                     <ul>
                         <li><a href="changepassword">Change Password</a></li>
                         <li><a href="ChangeEmailAddress">Change Email Address</a></li>
-                        <li><a href="#">Update User Profile Details</a></li>
+                        <li><a href="ChangeUserAccountDetails">Update User Profile Details</a></li>
                     </ul>
 
                 </div>

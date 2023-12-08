@@ -138,7 +138,7 @@
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
+          "Host": "registration.api",
           "Port": "80"
         }
       ],

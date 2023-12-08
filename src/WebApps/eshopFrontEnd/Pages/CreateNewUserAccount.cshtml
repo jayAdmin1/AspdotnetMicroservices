@@ -26,25 +26,30 @@
                 <div class="card-body">
                     <form asp-page-handler="AddUser" method="post">
                         <div class="form-group">
-                            <label for="username">Name</label>
-                            <input type="text" class="form-control" id="Name" name="@nameof(Model.user.Name)" placeholder="Enter Name" required>
+                            <label for="@nameof(Model.user.Name)">Name</label>
+                            <input asp-for="user.Name" class="form-control" placeholder="Enter Name" />
+                            <span asp-validation-for="user.Name" class="text-danger"></span>
                         </div>
                         <div class="form-group">
-                            <label for="email">Email Address</label>
-                            <input type="email" class="form-control" id="EmailAddress" name="@nameof(Model.user.EmailAddress)" placeholder="Enter email" required>
+                            <label for="@nameof(Model.user.EmailAddress)">Email Address</label>
+                            <input asp-for="user.EmailAddress" class="form-control" placeholder="Enter the Email Address">
+                            <span asp-validation-for="user.EmailAddress" class="text-danger"></span>
                             <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
                         </div>
                         <div class="form-group">
-                            <label for="address">Address</label>
-                            <textarea class="form-control" id="Address" name="@nameof(Model.user.Address)" rows="3" required></textarea>
+                            <label for="@nameof(Model.user.Address)">Address</label>
+                            <textarea asp-for="user.Address" class="form-control" rows="3"></textarea>
+                            <span asp-validation-for="user.Address" class="text-danger"></span>
                         </div>
                         <div class="form-group">
-                            <label for="mobileno">MobileNo</label>
-                            <input type="text" class="form-control" id="MobileNo" name="@nameof(Model.user.MobileNo)" placeholder="Enter mobile no" required>
+                            <label for="@nameof(Model.user.MobileNo)">MobileNo</label>
+                            <input asp-for="user.MobileNo" class="form-control" placeholder="Enter mobile no.">
+                            <span asp-validation-for="user.MobileNo" class="text-danger"></span>
                         </div>
                         <div class="form-group">
-                            <label for="password">Password</label>
-                            <input type="password" class="form-control" id="Password" name="@nameof(Model.user.Password)" placeholder="Enter password" required>
+                            <label for="@nameof(Model.user.Password)">Password</label>
+                            <input asp-for="user.Password" type="password" class="form-control" placeholder="Enter password">
+                            <span asp-validation-for="user.Password" class="text-danger"></span>
                         </div>
                         <div class="mx-auto">
                             <button type="submit" class="btn btn-primary text-right">Submit</button> Or 

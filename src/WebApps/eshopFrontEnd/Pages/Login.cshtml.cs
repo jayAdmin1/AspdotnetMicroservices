@@ -3,15 +3,11 @@ using eshopFrontEnd.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-using System.Runtime.InteropServices;
-
 namespace eshopFrontEnd.Pages
 {
     public class LoginModel : PageModel
     {
         private readonly IUserService _userService;
-        //private const string SessionEmail = "_Email";
-        //private const string SessionToken = "_Token";
         private readonly IConfiguration _configuration;
         public LoginModel(IUserService userService, IConfiguration configuration)
         {
@@ -24,16 +20,21 @@ namespace eshopFrontEnd.Pages
         {
             userLogin = new UserLoginModel();
         }
-        public async Task<IActionResult> OnPostLoginUserAsync(UserLoginModel userLoginModel)
+        public async Task<IActionResult> OnPostLoginUser(UserLoginModel userLoginModel)
         {
-            var userLogin = await _userService.Login(userLoginModel);
-            if (!string.IsNullOrEmpty(userLogin.Item1))
+            if (TryValidateModel(userLoginModel, nameof(userLogin)))
             {
-                HttpContext.Session.SetString(_configuration["Session:SessionEmail"], userLoginModel.EmailAddress);
-                HttpContext.Session.SetString(_configuration["Session:SessionToken"],userLogin.Item1);
-                return RedirectToPage("Index");
+                var result = await _userService.Login(userLoginModel);
+                if (!string.IsNullOrEmpty(result.Item1) && (result.Item2 != Guid.Empty))
+                {
+                    HttpContext.Session.SetString(_configuration["Session:SessionEmail"], userLoginModel.EmailAddress);
+                    HttpContext.Session.SetString(_configuration["Session:SessionToken"], result.Item1);
+                    HttpContext.Session.SetString(_configuration["Session:SessionUserId"], result.Item2.ToString());
+                    return RedirectToPage("Index");
+                }
+                return RedirectToPage("error", result.Item3);
             }
-            return RedirectToPage("error", userLogin.Item2);
+           return Page();
         }
     }
 }

@@ -14,16 +14,23 @@ namespace eshopFrontEnd.Pages
             _userService = userService ?? throw new ArgumentNullException(nameof(userService));
         }
 
-        public UserAddModel user { get; set; } 
-        public async Task<IActionResult> OnGet()
-        { 
-            user = new UserAddModel();
-            return Page();
-        }
-        public async Task<IActionResult> OnPostAddUserAsync(UserAddModel userAddModel)
+        public UserAddModel user { get; set; }
+        public void OnGet()
         {
-            var result = await _userService.CreateUser(userAddModel);
-            return !string.IsNullOrEmpty(result.Item2.Message) ? RedirectToPage("error", result.Item2) : RedirectToPage("Login");
+            user = new UserAddModel();
+        }
+        public async Task<IActionResult> OnPostAddUser(UserAddModel userAddModel)
+        {
+            if (TryValidateModel(userAddModel, nameof(user)))
+            {
+                var result = await _userService.CreateUser(userAddModel);
+                if (!string.IsNullOrEmpty(result.Item2.Message))
+                {
+                    RedirectToPage("error", result.Item2);
+                }
+                RedirectToPage("Login");
+            }
+            return Page();
         }
     }
 }

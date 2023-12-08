@@ -20,17 +20,25 @@ namespace eshopFrontEnd.Pages
         {
             UserChangePasswordModel = new UserChangePasswordModel();
         }
-        public async Task<IActionResult> OnPostChangeUserPasswordAsync(UserChangePasswordModel userChangePassword)
+        public async Task<IActionResult> OnPostChangeUserPassword(UserChangePasswordModel userChangePassword)
         {
-            if (TryValidateModel(userChangePassword, nameof(UserChangePasswordModel)))
+            try
             {
-                var token = HttpContext.Session.GetString(_configuration["Session:SessionToken"]);
-                var result = await _userService.ChangePassword(userChangePassword, token);
-                if (!string.IsNullOrEmpty(result.Item1))
+                if (TryValidateModel(userChangePassword, nameof(UserChangePasswordModel)))
                 {
-                    return RedirectToPage("Login");
+                    var token = HttpContext.Session.Keys.Contains(_configuration["Session:SessionToken"]) ? HttpContext.Session.GetString(_configuration["Session:SessionToken"]) : throw new ArgumentNullException("Token Not Found");
+
+                    var result = await _userService.ChangePassword(userChangePassword, token);
+                    if (!string.IsNullOrEmpty(result.Item1))
+                    {
+                        return RedirectToPage("Login");
+                    }
+                    return RedirectToPage("error", result.Item2);
                 }
-                return RedirectToPage("error", result.Item2);
+            }
+            catch (Exception ex)
+            {
+                return RedirectToPage("error", ex);
             }
             return Page();
         }

@@ -75,7 +75,7 @@ namespace Registration.API.Controllers
 
         [Authorize]
         [HttpPost("ChangeEmailAddress")]
-        public async Task<IActionResult> ChangeEmailAddress(UserEmailModel userEmailModel ,CancellationToken cancellationToken = default)
+        public async Task<IActionResult> ChangeEmailAddress(UserEmailModel userEmailModel, CancellationToken cancellationToken = default)
         {
             var result = await _userService.ChangeEmail(userEmailModel, cancellationToken);
             return !string.IsNullOrEmpty(result.Item1) ? Ok(result.Item1) : BadRequest(result.Item2);

@@ -1,0 +1,52 @@
+﻿@page
+@model eshopFrontEnd.Pages.ChangeUserAccountDetailsModel
+@{
+    ViewData["Title"] = "UpdateUserAccount";
+}
+<div class="container">
+    <div class="row">
+        <div class="col">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+                    <li class="breadcrumb-item"><a href="login.html"> Login</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Change User Details</li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+</div>
+<div class="container">
+    <div class="row">
+        <div class="col">
+            <div class="card" style="max-width:40%">
+                <div class="card-header bg-primary text-white">
+                    Change User Details
+                </div>
+                <div class="card-body">
+                    <form asp-page-handler="UpdateUser" method="post">
+                        <div class="form-group">
+                            <label for="@nameof(UserUpdateModel.Name)">Name</label>
+                            <input asp-for="userUpdateModel.Name" class="form-control" placeholder="Enter Name">
+                            <span asp-validation-for="userUpdateModel.Name" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label for="@nameof(UserUpdateModel.MobileNo)">Mobile No</label>
+                            <input asp-for="userUpdateModel.MobileNo" class="form-control" placeholder="Enter Mobile No.">
+                            <span asp-validation-for="userUpdateModel.MobileNo" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label for="@nameof(UserUpdateModel.Address)">Address</label>
+                            <textarea asp-for="userUpdateModel.Address" class="form-control" rows="3"></textarea>
+                            <span asp-validation-for="userUpdateModel.Address" class="text-danger"></span>
+                        </div>
+                        <div class="mx-auto">
+                            <button type="submit" class="btn btn-primary text-right">Submit</button> Or
+                            <a class="" asp-area="" asp-page="/Login">Try to Login!</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

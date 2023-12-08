@@ -20,17 +20,25 @@ namespace eshopFrontEnd.Pages
         {
             UserChangeEmailAddressModel = new UserChangeEmailAddressModel();
         }
-        public async Task<IActionResult> OnPostChangeUserEmailAsync(UserChangeEmailAddressModel userChangeEmailAddress)
+        public async Task<IActionResult> OnPostChangeUserEmail(UserChangeEmailAddressModel userChangeEmailAddress)
         {
-            if (TryValidateModel(userChangeEmailAddress, nameof(UserChangeEmailAddressModel)))
+            try
             {
-                var token = HttpContext.Session.GetString(_configuration["Session:SessionToken"]);
-                var result = await _userService.ChangeEmailAddress(userChangeEmailAddress, token);
-                if (!string.IsNullOrEmpty(result.Item1))
+                if (TryValidateModel(userChangeEmailAddress, nameof(UserChangeEmailAddressModel)))
                 {
-                    return RedirectToPage("Login");
+                    var token = HttpContext.Session.Keys.Contains(_configuration["Session:SessionToken"]) ? HttpContext.Session.GetString(_configuration["Session:SessionToken"]) : throw new ArgumentNullException("Token Not Found");
+
+                    var result = await _userService.ChangeEmailAddress(userChangeEmailAddress, token);
+                    if (!string.IsNullOrEmpty(result.Item1))
+                    {
+                        return RedirectToPage("Login");
+                    }
+                    return RedirectToPage("error", result.Item2);
                 }
-                return RedirectToPage("error", result.Item2);
+            }
+            catch (Exception ex)
+            {
+                return RedirectToPage("error", ex);
             }
             return Page();
         }
