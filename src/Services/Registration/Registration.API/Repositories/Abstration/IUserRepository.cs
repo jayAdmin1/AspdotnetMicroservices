@@ -12,6 +12,7 @@ namespace Registration.API.Repositories.Abstration
         Task<bool> UpdateUser(User user, CancellationToken cancellationToken = default);
         Task<bool> UpdatePassword(User user, CancellationToken cancellationToken = default);
         Task<bool> UpdateEmailAddress(User user, CancellationToken cancellationToken = default);
-
+        Task<bool> AddingOTP(UserOtp userOtp, CancellationToken cancellationToken = default);
+        Task<UserOtp> GetUserOTP(User user, CancellationToken cancellationToken);
     }
 }

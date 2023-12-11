@@ -12,5 +12,7 @@ namespace Registration.API.Services.Abstration
         Task<(string, RegistrationApiError)> Login(UserLoginModel userLogin, CancellationToken cancellationToken);
         Task<(string, RegistrationApiError)> ChangePassword(UserPasswordModel userPasswordModel, CancellationToken cancellationToken);
         Task<(string, RegistrationApiError)> ChangeEmail(UserEmailModel userEmailModel, CancellationToken cancellationToken);
+        Task<(string, RegistrationApiError)> SendOTP(string emailAddress, CancellationToken cancellationToken);
+        Task<(string, RegistrationApiError)> VerifyOTP(string userEmailAddress, int OTP, CancellationToken cancellationToken = default);
     }
 }

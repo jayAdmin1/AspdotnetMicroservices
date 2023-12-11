@@ -15,6 +15,13 @@ namespace Registration.API.Repositories.Implementation
             _dataContext = dataContext;
         }
 
+        public async Task<bool> AddingOTP(UserOtp userOtp, CancellationToken cancellationToken = default)
+        {
+            await _dataContext.UsersOtp.AddAsync(userOtp, cancellationToken);
+            var count = await _dataContext.SaveChangesAsync(cancellationToken);
+            return count > 0;
+        }
+
         public async Task<bool> AddUserData(User user, CancellationToken cancellationToken = default)
         {
             await _dataContext.Users.AddAsync(user, cancellationToken);
@@ -38,6 +45,12 @@ namespace Registration.API.Repositories.Implementation
         {
             var user = await _dataContext.Users.FirstOrDefaultAsync(u => u.EmailAddress.Equals(emailAddress) && !u.IsDeleted, cancellationToken);
             return user;
+        }
+
+        public async Task<UserOtp> GetUserOTP(User user, CancellationToken cancellationToken)
+        {
+            var userOTP = await _dataContext.UsersOtp.OrderBy(u=> u.Id).LastOrDefaultAsync(u => u.UserId == user.Id, cancellationToken);
+            return userOTP;
         }
 
         public async Task<bool> RemoveUser(User user, CancellationToken cancellationToken = default)

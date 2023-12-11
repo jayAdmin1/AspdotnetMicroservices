@@ -7,5 +7,7 @@ namespace Registration.API.Services.Abstration
         (string, byte[]) PasswordSalt(string password);
         bool VerifyPassword(string storedPassword, byte[] passwordSalt, string enteredPassword);
         string Authenticate(User user);
+        int GenerateRandomOtp();
+        Task SendEmail(string email, string subject, string message);
     }
 }

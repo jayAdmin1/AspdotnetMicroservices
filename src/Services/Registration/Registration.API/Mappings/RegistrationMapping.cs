@@ -13,6 +13,11 @@ namespace Registration.API.Mappings
                 .ForMember(x => x.Name, dest => dest.MapFrom(src => src.Name))
                 .ForMember(x => x.MobileNo, dest => dest.MapFrom(src => src.MobileNo))
                 .ForMember(x => x.Address, dest => dest.MapFrom(src => src.Address));
+
+            CreateMap<AddOTP, UserOtp>().AfterMap((dto, user) =>
+            {
+                user.SendDateTime = DateTime.Now;
+            });
         }
     }
 }

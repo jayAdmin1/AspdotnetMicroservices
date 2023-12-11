@@ -7,6 +7,7 @@ using Registration.API.Repositories.Abstration;
 using Registration.API.Repositories.Implementation;
 using Registration.API.Services.Abstration;
 using Registration.API.Services.Implementation;
+using Registration.API.ViewModels;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -25,7 +26,7 @@ builder.Services.AddAutoMapper(typeof(RegistrationMapping));
 builder.Services.JWTConfiguration(builder.Configuration);
 builder.Services.AddSwaggerConfiguration(builder.Configuration,builder.Environment);
 builder.Services.AddHttpContextAccessor();
-
+builder.Services.Configure<EmailSettings>(builder.Configuration.GetSection("EmailSettings"));
 var app = builder.Build();
 
 app.MigrateDatabase<DataContext>((context, services) =>

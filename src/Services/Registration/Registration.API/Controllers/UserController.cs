@@ -11,7 +11,7 @@ namespace Registration.API.Controllers
     public class UserController : ControllerBase
     {
         private readonly IUserService _userService;
-
+         
         public UserController(IUserService userService)
         {
             _userService = userService;
@@ -78,6 +78,29 @@ namespace Registration.API.Controllers
         public async Task<IActionResult> ChangeEmailAddress(UserEmailModel userEmailModel, CancellationToken cancellationToken = default)
         {
             var result = await _userService.ChangeEmail(userEmailModel, cancellationToken);
+            return !string.IsNullOrEmpty(result.Item1) ? Ok(result.Item1) : BadRequest(result.Item2);
+        }
+
+        [Authorize]
+        [HttpPost("SendOTP")]
+        public async Task<IActionResult> SendOTP(string emailAddress, CancellationToken cancellationToken = default)
+        {
+            var result = await _userService.SendOTP(emailAddress, cancellationToken);
+            return !string.IsNullOrEmpty(result.Item1) ? Ok(result.Item1) : BadRequest(result.Item2);
+        }
+
+        [HttpPost("VerifyOtp")]
+        [Authorize]
+        public async Task<IActionResult> VerifyOTP(string userEmailAddress, int OTP, CancellationToken cancellationToken = default)
+        {
+            var result = await _userService.VerifyOTP(userEmailAddress, OTP, cancellationToken);
+            return !string.IsNullOrEmpty(result.Item1) ? Ok(result.Item1) : BadRequest(result.Item2);
+        }
+        [Authorize]
+        [HttpPost("ResendOTP")]
+        public async Task<IActionResult> ResendOTP(string emailAddress, CancellationToken cancellationToken = default)
+        {
+            var result = await _userService.SendOTP(emailAddress, cancellationToken);
             return !string.IsNullOrEmpty(result.Item1) ? Ok(result.Item1) : BadRequest(result.Item2);
         }
     }

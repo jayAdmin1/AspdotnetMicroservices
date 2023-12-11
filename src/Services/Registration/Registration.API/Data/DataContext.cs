@@ -14,5 +14,6 @@ namespace Registration.API.Data
             modelBuilder.Entity<User>().HasIndex(e => e.EmailAddress).IsUnique(true);
         }
         public DbSet<User> Users { get; set; }
+        public DbSet<UserOtp> UsersOtp { get; set; }
     }
 }

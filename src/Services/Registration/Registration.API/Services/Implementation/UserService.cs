@@ -8,6 +8,7 @@ using Registration.API.Repositories.Abstration;
 using Registration.API.Services.Abstration;
 using Registration.API.Validations;
 using Registration.API.ViewModels;
+using System.Net.Mail;
 using System.Reflection.Metadata.Ecma335;
 
 namespace Registration.API.Services.Implementation
@@ -131,9 +132,9 @@ namespace Registration.API.Services.Implementation
                 var isPasswordUpdate = await _userRepository.UpdatePassword(userData, cancellationToken);
                 if (isPasswordUpdate)
                 {
-                    return ("Password Updated Successfully",new RegistrationApiError(string.Empty));
+                    return ("Password Updated Successfully", new RegistrationApiError(string.Empty));
                 }
-                return (string.Empty,new RegistrationApiError("Error while updating password"));
+                return (string.Empty, new RegistrationApiError("Error while updating password"));
             }
             catch (Exception ex)
             {
@@ -272,7 +273,7 @@ namespace Registration.API.Services.Implementation
                 }
 
                 //Generate Token
-                var token =_helperService.Authenticate(userData);
+                var token = _helperService.Authenticate(userData);
                 return (token, new RegistrationApiError(string.Empty));
             }
             catch (Exception ex)
@@ -305,6 +306,41 @@ namespace Registration.API.Services.Implementation
             catch (Exception ex)
             {
                 error = "UserService RemoveUser API Error " + ex.Message;
+                return (string.Empty, new RegistrationApiError(error));
+            }
+        }
+
+        public async Task<(string, RegistrationApiError)> SendOTP(string emailAddress, CancellationToken cancellationToken)
+        {
+            string? error;
+            try
+            {
+                var userData = await _userRepository.GetUserEmailAddress(emailAddress, cancellationToken);
+                if (userData is null)
+                {
+                    error = "User Record Not Found";
+                    return (string.Empty, new RegistrationApiError(error));
+                }
+
+                var otp = _helperService.GenerateRandomOtp();
+                var addOTPModel = new AddOTP()
+                {
+                    UserId = userData.Id,
+                    Otp = otp
+                };
+
+                var userOTPModel = _mapper.Map<UserOtp>(addOTPModel);
+                bool IsOTPInserted = await _userRepository.AddingOTP(userOTPModel, cancellationToken);
+                if (IsOTPInserted)
+                {
+                    await _helperService.SendEmail(userData.EmailAddress, "OTP verification", "Dear " + userData.Name + ", \nHere is the OTP for your account login is : " + otp);
+                    return ("OTP Sended Successfully", new RegistrationApiError(string.Empty));
+                }
+                return (string.Empty, new RegistrationApiError("Error While Sending OTP"));
+            }
+            catch (Exception ex)
+            {
+                error = "UserService SendOTP API Error : " + ex.Message;
                 return (string.Empty, new RegistrationApiError(error));
             }
         }
@@ -354,6 +390,37 @@ namespace Registration.API.Services.Implementation
                 return (new NullUserDisplayModel(), new RegistrationApiError(error));
             }
             throw new NotImplementedException();
+        }
+
+        public async Task<(string, RegistrationApiError)> VerifyOTP(string userEmailAddress, int OTP, CancellationToken cancellationToken = default)
+        {
+            string? error;
+            try
+            {
+                var userData = await _userRepository.GetUserEmailAddress(userEmailAddress, cancellationToken);
+                var userOTPData = await _userRepository.GetUserOTP(userData, cancellationToken);
+                if (userData is null)
+                {
+                    error = "User Record Not Found";
+                    return (string.Empty, new RegistrationApiError(error));
+                }
+                var datediff = DateTime.Now.Subtract(userOTPData.SendDateTime);
+                if (datediff.TotalSeconds <= 90 && userOTPData.Otp.Equals(OTP))
+                {
+                    return ("OTP Verified Successfully", new RegistrationApiError(string.Empty));
+                }
+                else
+                {
+                    error = "OTP Not Verified";
+                    return (string.Empty, new RegistrationApiError(error));
+                }
+            }
+            catch (Exception ex)
+            {
+                error = "UserService VerifyOtp API Error : " + ex.Message;
+                return (string.Empty, new RegistrationApiError(error));
+            }
+
         }
     }
 }

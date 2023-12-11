@@ -13,7 +13,7 @@ namespace Registration.API.Domains
         public string Password { get; set; }
         public byte[] PasswordSalt { get; set; }
         public bool IsDeleted { get; set; }
-
+        public ICollection<UserOtp> UserOtp { get; set; }
         protected User() { }
         public User(string name, string emailaddress, string mobileno, string address, string password, byte[] passwordsalt, bool isdeleted)
         {
