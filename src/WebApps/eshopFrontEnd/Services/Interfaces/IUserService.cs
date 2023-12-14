@@ -9,5 +9,8 @@ namespace eshopFrontEnd.Services.Interfaces
         Task<(string,UserErrorModel)>ChangePassword(UserChangePasswordModel userChangePasswordModel, string token);
         Task<(string, UserErrorModel)> ChangeEmailAddress(UserChangeEmailAddressModel userChangeEmailAddressModel, string token);
         Task<(UserAddModel, UserErrorModel)> UpdateUser(UserUpdateModel userUpdate,Guid userId, string token);
+        Task<(string, UserErrorModel)> SendOTP(string token, string userEmailAddress);
+        Task<(string, UserErrorModel)> VerifyOTP(string token, string userEmailAddress, string OTP);
+        Task<(string, UserErrorModel)> ResendOTP(string token, string userEmailAddress);
     }
 }

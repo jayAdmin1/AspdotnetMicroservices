@@ -11,7 +11,7 @@ namespace Registration.API.Controllers
     public class UserController : ControllerBase
     {
         private readonly IUserService _userService;
-         
+
         public UserController(IUserService userService)
         {
             _userService = userService;
@@ -82,25 +82,26 @@ namespace Registration.API.Controllers
         }
 
         [Authorize]
-        [HttpPost("SendOTP")]
-        public async Task<IActionResult> SendOTP(string emailAddress, CancellationToken cancellationToken = default)
+        [HttpPost("SendOTP/{userEmailAddress}")]
+        public async Task<IActionResult> SendOTP([FromRoute] string userEmailAddress, CancellationToken cancellationToken = default)
         {
-            var result = await _userService.SendOTP(emailAddress, cancellationToken);
+            var result = await _userService.SendOTP(userEmailAddress, cancellationToken);
             return !string.IsNullOrEmpty(result.Item1) ? Ok(result.Item1) : BadRequest(result.Item2);
         }
 
-        [HttpPost("VerifyOtp")]
         [Authorize]
-        public async Task<IActionResult> VerifyOTP(string userEmailAddress, int OTP, CancellationToken cancellationToken = default)
+        [HttpPost("VerifyOTP/{userEmailAddress}/{OTP}")]
+        public async Task<IActionResult> VerifyOTP([FromRoute] string userEmailAddress, [FromRoute] int OTP, CancellationToken cancellationToken = default)
         {
             var result = await _userService.VerifyOTP(userEmailAddress, OTP, cancellationToken);
             return !string.IsNullOrEmpty(result.Item1) ? Ok(result.Item1) : BadRequest(result.Item2);
         }
+
         [Authorize]
-        [HttpPost("ResendOTP")]
-        public async Task<IActionResult> ResendOTP(string emailAddress, CancellationToken cancellationToken = default)
+        [HttpPost("ResendOTP/{userEmailAddress}")]
+        public async Task<IActionResult> ResendOTP(string userEmailAddress, CancellationToken cancellationToken = default)
         {
-            var result = await _userService.SendOTP(emailAddress, cancellationToken);
+            var result = await _userService.SendOTP(userEmailAddress, cancellationToken);
             return !string.IsNullOrEmpty(result.Item1) ? Ok(result.Item1) : BadRequest(result.Item2);
         }
     }

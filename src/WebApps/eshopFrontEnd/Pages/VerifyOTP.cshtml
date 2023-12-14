@@ -1,0 +1,41 @@
+﻿@page
+@model eshopFrontEnd.Pages.VerifyOTPModel
+@{
+    ViewData["Title"] = "VerifyOTP";
+}
+@*<div class="container">
+    <div class="row">
+        <div class="col">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+                    <li class="breadcrumb-item"><a href="login.html"> Login</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Verify OTP</li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+</div>*@
+<div class="container">
+    <div class="row">
+        <div class="col">
+            <div class="card" style="max-width:40%">
+                <div class="card-header bg-primary text-white">
+                    Verify OTP
+                </div>
+                <div class="card-body">
+                    <form asp-page-handler="VerifyOTP" method="post">
+                        <div class="form-group">
+                            <label for="OTP">OTP</label>
+                            <input type="number" class="form-control" id="OTP" name="OTP" placeholder="Enter OTP" required>
+                        </div>
+                        <div class="mx-auto">
+                            <button type="submit" class="btn btn-primary text-right">Submit</button>Or
+                            <a asp-page-handler="ResendOTP">ResendOTP</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -180,6 +180,42 @@
       ],
       "UpstreamPathTemplate": "/User/ChangeEmailAddress",
       "UpstreamHttpMethod": [ "POST" ]
+    },
+    {
+      "DownstreamPathTemplate": "/api/v1/User/SendOTP/{userEmailAddress}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "registration.api",
+          "Port": "80"
+        }
+      ],
+      "UpstreamPathTemplate": "/User/SendOTP/{userEmailAddress}",
+      "UpstreamHttpMethod": [ "POST" ]
+    },
+    {
+      "DownstreamPathTemplate": "/api/v1/User/VerifyOTP/{userEmailAddress}/{OTP}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "registration.api",
+          "Port": "80"
+        }
+      ],
+      "UpstreamPathTemplate": "/User/VerifyOTP/{userEmailAddress}/{OTP}",
+      "UpstreamHttpMethod": [ "POST" ]
+    },
+    {
+      "DownstreamPathTemplate": "/api/v1/User/ResendOTP/{userEmailAddress}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "registration.api",
+          "Port": "80"
+        }
+      ],
+      "UpstreamPathTemplate": "/User/ResendOTP/{userEmailAddress}",
+      "UpstreamHttpMethod": [ "POST" ]
     }
   ],
   "GlobalConfiguration": {

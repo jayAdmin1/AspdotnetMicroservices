@@ -389,7 +389,6 @@ namespace Registration.API.Services.Implementation
                 error = "UserService UpdateUser API Error : " + ex.Message;
                 return (new NullUserDisplayModel(), new RegistrationApiError(error));
             }
-            throw new NotImplementedException();
         }
 
         public async Task<(string, RegistrationApiError)> VerifyOTP(string userEmailAddress, int OTP, CancellationToken cancellationToken = default)

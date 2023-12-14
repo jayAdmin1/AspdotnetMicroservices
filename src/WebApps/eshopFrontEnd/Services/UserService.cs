@@ -2,10 +2,14 @@
 using eshopFrontEnd.Models;
 using eshopFrontEnd.Services.Interfaces;
 using Microsoft.IdentityModel.Tokens;
+using Newtonsoft.Json;
 using System.IdentityModel.Tokens.Jwt;
 using System.Net.Http.Headers;
+using System.Net.Http.Json;
+using System.Net.Mail;
 using System.Security.Claims;
 using System.Text;
+using System.Text.Json;
 
 namespace eshopFrontEnd.Services
 {
@@ -130,7 +134,7 @@ namespace eshopFrontEnd.Services
             return Guid.Parse(jwtToken.Claims.First(x => x.Type == "sub").Value);
         }
 
-        public async Task<(UserAddModel, UserErrorModel)> UpdateUser(UserUpdateModel userUpdate,Guid userId, string token)
+        public async Task<(UserAddModel, UserErrorModel)> UpdateUser(UserUpdateModel userUpdate, Guid userId, string token)
         {
             userError = new UserErrorModel();
             var userUpdated = new UserAddModel();
@@ -160,6 +164,69 @@ namespace eshopFrontEnd.Services
                     return (userUpdated, userError);
                 default:
                     throw new NotImplementedException("Something went wrong when calling api.");
+            }
+        }
+
+        public async Task<(string, UserErrorModel)> SendOTP(string token, string userEmailAddress)
+        {
+            userError = new UserErrorModel();
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            var response = await _client.PostAsJsonAsync($"/User/SendOTP/{userEmailAddress}", userEmailAddress);
+            if (response.IsSuccessStatusCode)
+            {
+                var result = await response.Content.ReadAsStringAsync();
+                return (result, userError);
+            }
+            else if (response.StatusCode == System.Net.HttpStatusCode.BadRequest)
+            {
+                userError = await response.Content.ReadFromJsonAsync<UserErrorModel>();
+                return (string.Empty, userError);
+            }
+            else
+            {
+                throw new NotImplementedException("Something went wrong when calling SendOTP api.");
+            }
+        }
+
+        public async Task<(string, UserErrorModel)> VerifyOTP(string token, string userEmailAddress, string OTP)
+        {
+            userError = new UserErrorModel();
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            var response = await _client.PostAsJsonAsync($"/User/VerifyOTP/{userEmailAddress}/{OTP}", string.Empty);
+            if (response.IsSuccessStatusCode)
+            {
+                var result = await response.Content.ReadAsStringAsync();
+                return (result, userError);
+            }
+            else if (response.StatusCode == System.Net.HttpStatusCode.BadRequest)
+            {
+                userError = await response.Content.ReadFromJsonAsync<UserErrorModel>();
+                return (string.Empty, userError);
+            }
+            else
+            {
+                throw new NotImplementedException("Something went wrong when calling VerifyOTP api.");
+            }
+        }
+
+        public async Task<(string, UserErrorModel)> ResendOTP(string token, string userEmailAddress)
+        {
+            userError = new UserErrorModel();
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            var response = await _client.PostAsJsonAsync($"/User/ResendOTP/{userEmailAddress}", userEmailAddress);
+            if (response.IsSuccessStatusCode)
+            {
+                var result = await response.Content.ReadAsStringAsync();
+                return (result, userError);
+            }
+            else if (response.StatusCode == System.Net.HttpStatusCode.BadRequest)
+            {
+                userError = await response.Content.ReadFromJsonAsync<UserErrorModel>();
+                return (string.Empty, userError);
+            }
+            else
+            {
+                throw new NotImplementedException("Something went wrong when calling ResendOTP api.");
             }
         }
     }
